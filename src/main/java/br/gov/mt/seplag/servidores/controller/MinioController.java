@@ -1,13 +1,22 @@
 package br.gov.mt.seplag.servidores.controller;
 
 import br.gov.mt.seplag.servidores.service.MinioService;
-
+import io.minio.*;
+import io.minio.errors.*;
+import io.minio.http.Method;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 @RestController
-@RequestMapping("/api/minio")
+@RequestMapping("/api/fotos")
 public class MinioController {
 
     private final MinioService minioService;
@@ -17,22 +26,22 @@ public class MinioController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         try {
-            String fileName = minioService.uploadFile(file);
-            return ResponseEntity.ok("Arquivo enviado: " + fileName);
+            String objectName = minioService.uploadFile(file);
+            return ResponseEntity.ok("Upload bem-sucedido: " + objectName);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e.getMessage());
         }
     }
 
-    @GetMapping("/download")
-    public ResponseEntity<String> getFileUrl(@RequestParam("fileName") String fileName) {
+    @GetMapping("/url")
+    public ResponseEntity<String> getUrl(@RequestParam("objectName") String objectName) {
         try {
-            String url = minioService.getPresignedUrl(fileName);
+            String url = minioService.generatePresignedUrl(objectName);
             return ResponseEntity.ok(url);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e.getMessage());
         }
     }
 }

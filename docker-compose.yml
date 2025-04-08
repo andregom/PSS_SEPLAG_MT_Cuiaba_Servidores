@@ -1,56 +1,57 @@
 services:
   postgres:
-    image: postgres:16
-    container_name: postgres-servidores
+    image: postgres:15
+    container_name: postgres
     environment:
-      POSTGRES_DB: servidores_db
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
-      - servidores-net
+      - servidores-network
 
   minio:
-    image: minio/minio:latest
-    container_name: minio-servidores
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    command: server /data --console-address ":9001"
+    image: minio/minio
+    container_name: minio
     ports:
-      - "9000:9000" # API
-      - "9001:9001" # Console Web
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
     volumes:
       - minio-data:/data
     networks:
-      - servidores-net
+      - servidores-network
 
   servidores-api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: servidores-api
     depends_on:
       - postgres
       - minio
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET_NAME}
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/servidores_db
-      SPRING_DATASOURCE_USERNAME: devuser
-      SPRING_DATASOURCE_PASSWORD: devpass
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      MINIO_URL: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
     networks:
-      - servidores-net
+      - servidores-network
 
 volumes:
-  pgdata:
+  postgres-data:
   minio-data:
 
 networks:
-  servidores-net:
+  servidores-network:
     driver: bridge
