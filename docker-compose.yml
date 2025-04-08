@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-servidores
+    environment:
+      POSTGRES_DB: servidores_db
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - servidores-net
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio-servidores
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Console Web
+    volumes:
+      - minio-data:/data
+    networks:
+      - servidores-net
+
+  servidores-api:
+    build: .
+    container_name: servidores-api
+    depends_on:
+      - postgres
+      - minio
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/servidores_db
+      SPRING_DATASOURCE_USERNAME: devuser
+      SPRING_DATASOURCE_PASSWORD: devpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      MINIO_URL: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    networks:
+      - servidores-net
+
+volumes:
+  pgdata:
+  minio-data:
+
+networks:
+  servidores-net:
+    driver: bridge
