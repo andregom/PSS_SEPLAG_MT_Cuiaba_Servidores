@@ -27,7 +27,10 @@ public class ServidorEfetivo {
     @JoinColumn(name = "lotacao_id")
     private Lotacao lotacao;
 
+    public ServidorEfetivo(Object o, String nome, LocalDate nascimento, String fotoUrl) {
+    }
+
     public int getIdade() {
-        return LocalDate.now().getYear() - dataNascimento.getYear(); // simplificado
+        return LocalDate.now().getYear() - dataNascimento.getYear();
     }
 }

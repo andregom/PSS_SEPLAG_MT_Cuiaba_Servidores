@@ -20,4 +20,6 @@ public class Lotacao {
 
     private String descricao;
 
+    public Lotacao(Long id, ServidorEfetivo servidor, Unidade unidadeEscolhida) {
+    }
 }
