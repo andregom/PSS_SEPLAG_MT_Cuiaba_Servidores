@@ -1,6 +1,18 @@
 server:
   port: 8080
 
+services:
+  servidores-api:
+    env_file:
+      - .env
+    environment:
+      - CORS_ALLOWED_ORIGIN=${CORS_ALLOWED_ORIGIN:http://localhost:3000}
+
+jwt:
+  secret: ${JWT_SECRET:uma-chave-muito-segura-mesmo-aqui}
+  access-token-expiration-ms: 300000      # 5 minutos
+  refresh-token-expiration-ms: 604800000  # 7 dias
+
 logging:
   level:
     org.springframework.security: DEBUG

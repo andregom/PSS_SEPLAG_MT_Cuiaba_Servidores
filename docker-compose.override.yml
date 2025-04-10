@@ -34,6 +34,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: dev
+    volumes:
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+      - ./target:/app/target
+    command: mvn spring-boot:run
     container_name: servidores-api
     depends_on:
       - postgres
