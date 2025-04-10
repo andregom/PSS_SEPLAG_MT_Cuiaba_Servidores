@@ -1,19 +1,11 @@
 package br.gov.mt.seplag.servidores.controller;
 
 import br.gov.mt.seplag.servidores.service.MinioService;
-import io.minio.*;
-import io.minio.errors.*;
-import io.minio.http.Method;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/fotos")
