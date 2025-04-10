@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,11 +16,10 @@ public class Lotacao {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "servidor_id")
+    private ServidorEfetivo servidor;
+
+    @ManyToOne
     @JoinColumn(name = "unidade_id")
     private Unidade unidade;
-
-    private String descricao;
-
-    public Lotacao(Long id, ServidorEfetivo servidor, Unidade unidadeEscolhida) {
-    }
 }

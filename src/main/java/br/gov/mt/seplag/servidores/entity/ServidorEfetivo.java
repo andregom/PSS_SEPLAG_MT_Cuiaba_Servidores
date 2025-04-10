@@ -27,7 +27,12 @@ public class ServidorEfetivo {
     @JoinColumn(name = "lotacao_id")
     private Lotacao lotacao;
 
-    public ServidorEfetivo(Object o, String nome, LocalDate nascimento, String fotoUrl) {
+    // 👇 Construtor simplificado para uso no Seeder
+    public ServidorEfetivo(Long id, String nome, LocalDate dataNascimento, String foto) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.foto = foto;
     }
 
     public int getIdade() {

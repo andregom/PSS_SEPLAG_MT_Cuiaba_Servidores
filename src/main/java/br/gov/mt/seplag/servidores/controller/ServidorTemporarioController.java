@@ -24,7 +24,7 @@ public class ServidorTemporarioController extends AbstractCrudController<Servido
 
     @Override
     protected Optional<ServidorTemporario> findById(Long id) {
-        return service.buscarPorId(id);
+        return Optional.ofNullable(service.buscarPorId(id));
     }
 
     @Override

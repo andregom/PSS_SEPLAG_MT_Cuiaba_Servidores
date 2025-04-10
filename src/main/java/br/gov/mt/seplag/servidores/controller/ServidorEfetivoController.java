@@ -24,7 +24,7 @@ public class ServidorEfetivoController extends AbstractCrudController<ServidorEf
 
     @Override
     protected Optional<ServidorEfetivo> findById(Long id) {
-        return service.buscarPorId(id);
+        return Optional.ofNullable(service.buscarPorId(id));
     }
 
     @Override

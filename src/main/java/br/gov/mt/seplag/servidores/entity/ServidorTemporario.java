@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,11 +20,19 @@ public class ServidorTemporario {
 
     private String nome;
 
-    private LocalDate dataNascimento;
+    private LocalDate nascimento;
+
+    private String foto;
 
     @ManyToOne
-    @JoinColumn(name = "lotacao_id")
-    private Lotacao lotacao;
+    @JoinColumn(name = "unidade_id")
+    private Unidade unidade;
 
     private LocalDate dataFimContrato;
+
+    public ServidorTemporario(String nome, LocalDate nascimento, Unidade unidade) {
+        this.nome = nome;
+        this.nascimento = nascimento;
+        this.unidade = unidade;
+    }
 }
