@@ -31,6 +31,6 @@ public class ServidorEfetivo {
     }
 
     public int getIdade() {
-        return LocalDate.now().getYear() - dataNascimento.getYear(); // simplificado
+        return LocalDate.now().getYear() - dataNascimento.getYear();
     }
 }
