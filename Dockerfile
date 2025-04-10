@@ -3,7 +3,7 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Copia o POM e resolve dependências antecipadamente (melhora cache)
+# Copia o POM e resolve dependências antecipadamente
 COPY pom.xml .
 
 RUN mvn dependency:go-offline -B
@@ -18,6 +18,8 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
+
+ARG ENVIRONMENT=prod
 
 # Copia o .jar da etapa anterior
 COPY --from=build /app/target/servidores*.jar app.jar
