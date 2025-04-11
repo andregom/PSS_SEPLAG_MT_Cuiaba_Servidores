@@ -4,7 +4,7 @@ server:
 services:
   servidores-api:
     env_file:
-      - .env
+      - .env.dev
     environment:
       - CORS_ALLOWED_ORIGIN=${CORS_ALLOWED_ORIGIN:http://localhost:3000}
 
