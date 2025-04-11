@@ -17,7 +17,7 @@ public class Lotacao {
 
     @ManyToOne
     @JoinColumn(name = "servidor_id")
-    private ServidorEfetivo servidor;
+    private ServidorEfetivo servidorEfetivo;
 
     @ManyToOne
     @JoinColumn(name = "unidade_id")
